@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 CloudFile - Cloud Storage Imut</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- NAVBAR SIMPLE & CLEAN -->
+<nav class="navbar">
+    <div class="nav-brand">
+        <i class="fas fa-cloud-rainbow"></i> CloudFile
+    </div>
+    <div class="nav-user" id="userArea" style="display:none;">
+        <!-- AVATAR BULAT (klik untuk ganti foto) -->
+        <div class="avatar-wrapper" onclick="document.getElementById('avatarInput').click()" title="Klik untuk ganti foto profil 🌸">
+            <div class="avatar-display" id="avatarDisplay">🌸</div>
+            <div class="avatar-edit-badge">
+                <i class="fas fa-camera"></i>
+            </div>
+        </div>
+        <input type="file" id="avatarInput" accept="image/*" onchange="changeAvatar(event)" style="display:none;">
+        
+        <span class="user-name" id="userNameDisplay">🌸 User</span>
+        
+        <button class="btn-logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</nav>
+
+    <div class="container">
+        
+        <!-- ========== LOGIN/REGISTER ========== -->
+        <div id="authBox" class="auth-container">
+            <h2>🌸 Welcome to CloudFile</h2>
+            <div class="auth-tabs">
+                <button class="tab active" onclick="showLogin()">✨ Login</button>
+                <button class="tab" onclick="showRegister()">💕 Register</button>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="loginEmail" placeholder="contoh@email.com">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="loginPassword" placeholder="Minimal 6 karakter">
+                </div>
+                <button class="btn-primary" onclick="doLogin()">
+                    <i class="fas fa-heart"></i> Login
+                </button>
+            </div>
+
+            <div id="registerForm" style="display:none;">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nama</label>
+                    <input type="text" id="regName" placeholder="Nama lengkap kamu">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="regEmail" placeholder="contoh@email.com">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="regPassword" placeholder="Minimal 6 karakter">
+                </div>
+                <button class="btn-primary" onclick="doRegister()">
+                    <i class="fas fa-heart"></i> Daftar
+                </button>
+            </div>
+        </div>
+
+        <!-- ========== DASHBOARD ========== -->
+        <div id="dashboard" style="display:none;" class="section">
+            <h2><i class="fas fa-home"></i> Dashboard</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-cloud"></i>
+                    <h3>💾 Storage</h3>
+                    <p id="storageInfo">0 GB / 1 GB</p>
+                    <div class="progress-bar">
+                        <div id="storageBar" class="progress" style="width:0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>📁 Total Files</h3>
+                    <p id="totalFiles">0</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-heart-circle-check"></i>
+                    <h3>🟢 Status Server</h3>
+                    <p id="serverStatus" class="status-online">Online</p>
+                </div>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-container" id="uploadSection">
+                <h3>📤 Upload File ke Cloud</h3>
+                <input type="file" id="fileInput" multiple>
+                <br>
+                <button class="btn-upload" onclick="uploadFiles()">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload ke Cloud ☁️
+                </button>
+                <div id="uploadStatus"></div>
+            </div>
+
+            <!-- File List -->
+            <div class="file-list-container">
+                <h3>📋 File Saya</h3>
+                <button class="btn-refresh" onclick="loadFiles()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <div id="fileList">
+                    <div class="empty-state">
+                        <i class="fas fa-cloud-moon"></i>
+                        <p>Belum ada file nih... 🌸</p>
+                        <p style="font-size:0.85rem;color:#c08090;">Upload file pertama kamu ya!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

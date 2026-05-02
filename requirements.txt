@@ -1,0 +1,6 @@
+Flask==2.3.2
+flask-cors==4.0.0
+flask-jwt-extended==4.5.2
+boto3==1.28.0
+redis==4.6.0
+Werkzeug==2.3.6
