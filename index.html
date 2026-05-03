@@ -1,1452 +1,685 @@
-    <!DOCTYPE html>
-    <html lang="id">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>☁️ CloudFile - Cloud Storage</title>
-        <style>
-/* ============================================
-   CLOUDFILE - PROFESSIONAL DASHBOARD THEME 🌸
-   ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
-    background: #f5f0f5;
-    color: #4a3040;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-/* ========== APP LAYOUT ========== */
-.app-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* ========== SIDEBAR ========== */
-.sidebar {
-    width: 260px;
-    background: white;
-    border-right: 1px solid #f0e0f0;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 100;
-    transition: all 0.3s ease;
-    box-shadow: 2px 0 20px rgba(0,0,0,0.03);
-}
-
-.sidebar.collapsed {
-    width: 70px;
-}
-
-.sidebar-brand {
-    padding: 25px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid #f0e0f0;
-}
-
-.sidebar-brand i {
-    font-size: 1.8rem;
-    color: #ff6b9d;
-}
-
-.sidebar-brand span {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #4a3040;
-    white-space: nowrap;
-}
-
-.sidebar.collapsed .sidebar-brand span,
-.sidebar.collapsed .nav-item span,
-.sidebar.collapsed .storage-mini-info,
-.sidebar.collapsed .storage-mini .progress-bar {
-    display: none;
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: 15px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    color: #7a6a75;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.nav-item i {
-    font-size: 1.1rem;
-    width: 20px;
-    text-align: center;
-}
-
-.nav-item:hover {
-    background: #fff5f8;
-    color: #ff6b9d;
-}
-
-.nav-item.active {
-    background: linear-gradient(135deg, #ff6b9d, #ff85b3);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
-}
-
-.sidebar-footer {
-    padding: 15px;
-    border-top: 1px solid #f0e0f0;
-}
-
-.storage-mini {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.storage-mini i {
-    font-size: 1.2rem;
-    color: #ff6b9d;
-}
-
-.storage-mini-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.storage-mini-label {
-    font-size: 0.75rem;
-    color: #999;
-    font-weight: 600;
-}
-
-.storage-mini-value {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #4a3040;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 6px;
-    background: #f0e0f0;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress {
-    height: 100%;
-    background: linear-gradient(90deg, #ff6b9d, #ff85b3);
-    border-radius: 10px;
-    transition: width 0.5s ease;
-}
-
-/* ========== MAIN CONTENT ========== */
-.main-content {
-    flex: 1;
-    margin-left: 260px;
-    transition: margin 0.3s ease;
-    min-height: 100vh;
-}
-
-.sidebar.collapsed + .main-content {
-    margin-left: 70px;
-}
-
-/* ========== TOPBAR ========== */
-.topbar {
-    background: white;
-    padding: 15px 25px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border-bottom: 1px solid #f0e0f0;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-}
-
-.btn-toggle {
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    color: #7a6a75;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-toggle:hover {
-    background: #f5f0f5;
-    color: #ff6b9d;
-}
-
-.topbar-search {
-    flex: 1;
-    max-width: 400px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #f8f5f8;
-    padding: 10px 18px;
-    border-radius: 25px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.topbar-search:focus-within {
-    border-color: #ff6b9d;
-    background: white;
-    box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.08);
-}
-
-.topbar-search i {
-    color: #b0a0b0;
-}
-
-.topbar-search input {
-    border: none;
-    background: transparent;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
-    width: 100%;
-    color: #4a3040;
-}
-
-.topbar-search input:focus {
-    outline: none;
-}
-
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-left: auto;
-}
-
-.notification-bell {
-    position: relative;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #7a6a75;
-    padding: 8px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.notification-bell:hover {
-    background: #f5f0f5;
-    color: #ff6b9d;
-}
-
-.badge {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    background: #ff4757;
-    color: white;
-    font-size: 0.6rem;
-    font-weight: 700;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.avatar-wrapper {
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.avatar-wrapper:hover {
-    transform: scale(1.1);
-}
-
-.avatar-display {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffe0ec, #fff0f5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    border: 3px solid #ffd1e0;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    background-size: cover;
-    background-position: center;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.user-name-top {
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: #4a3040;
-}
-
-.user-role {
-    font-size: 0.7rem;
-    color: #999;
-}
-
-.btn-logout-top {
-    background: none;
-    border: none;
-    color: #b0a0b0;
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-logout-top:hover {
-    background: #fff0f5;
-    color: #ff6b9d;
-}
-
-/* ========== PAGE CONTENT ========== */
-.page-content {
-    padding: 30px;
-}
-
-.page {
-    display: none;
-    animation: fadeIn 0.4s ease;
-}
-
-.page.active {
-    display: block;
-}
-
-.page-header {
-    margin-bottom: 30px;
-}
-
-.page-header h2 {
-    font-size: 1.6rem;
-    color: #4a3040;
-    margin-bottom: 5px;
-}
-
-.page-header p {
-    color: #999;
-    font-size: 0.9rem;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ========== AUTH ========== */
-.auth-container {
-    max-width: 450px;
-    margin: 60px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-}
-
-.auth-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.auth-header h2 {
-    margin-top: 15px;
-    color: #4a3040;
-    font-weight: 800;
-}
-
-.auth-header p {
-    color: #999;
-    margin-top: 5px;
-}
-
-.auth-tabs {
-    display: flex;
-    background: #f5f0f5;
-    border-radius: 30px;
-    padding: 5px;
-    margin-bottom: 25px;
-}
-
-.auth-tabs .tab {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.9rem;
-    background: transparent;
-    color: #999;
-    transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-}
-
-.auth-tabs .tab.active {
-    background: linear-gradient(135deg, #ff6b9d, #ff85b3);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: #7a6a75;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 14px 16px;
-    border: 2px solid #f0e0f0;
-    border-radius: 15px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    background: #faf7fa;
-    color: #4a3040;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #ff6b9d;
-    box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.08);
-    background: white;
-}
-
-.btn-primary {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #ff6b9d, #ff85b3);
-    color: white;
-    border: none;
-    border-radius: 15px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #ff85b3, #ff9ec4);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 107, 157, 0.3);
-}
-
-.btn-primary.btn-sm {
-    width: auto;
-    padding: 10px 20px;
-    font-size: 0.85rem;
-}
-
-/* ========== STATS GRID ========== */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.stat-card {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.04);
-    transition: all 0.3s ease;
-    border: 1px solid #f0e0f0;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-}
-
-.stat-icon {
-    width: 55px;
-    height: 55px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-}
-
-.stat-card.pink .stat-icon {
-    background: #fff0f5;
-    color: #ff6b9d;
-}
-
-.stat-card.blue .stat-icon {
-    background: #f0f5ff;
-    color: #6b9dff;
-}
-
-.stat-card.green .stat-icon {
-    background: #f0fff5;
-    color: #6bff9d;
-}
-
-.stat-label {
-    font-size: 0.8rem;
-    color: #999;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-value {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #4a3040;
-}
-
-/* ========== CARD ========== */
-.card {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.04);
-    border: 1px solid #f0e0f0;
-    overflow: hidden;
-    margin-bottom: 25px;
-}
-
-.card-header {
-    padding: 20px 25px;
-    border-bottom: 1px solid #f0e0f0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.card-header h3 {
-    font-size: 1.1rem;
-    color: #4a3040;
-}
-
-.btn-sm {
-    background: #f5f0f5;
-    color: #ff6b9d;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.8rem;
-    transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-}
-
-.btn-sm:hover {
-    background: #ffe0ec;
-}
-
-.card-body {
-    padding: 25px;
-}
-
-/* ========== TABLE ========== */
-.table-responsive {
-    overflow-x: auto;
-}
-
-.file-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.file-table th {
-    background: #faf7fa;
-    padding: 14px 20px;
-    text-align: left;
-    font-size: 0.8rem;
-    color: #999;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid #f0e0f0;
-}
-
-.file-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid #f5f0f5;
-    font-size: 0.9rem;
-}
-
-.file-table tr:hover td {
-    background: #fdf7fa;
-}
-
-.file-table .file-icon-cell {
-    font-size: 1.5rem;
-    color: #ff6b9d;
-    width: 40px;
-}
-
-.empty-cell {
-    text-align: center;
-    color: #ccc;
-    padding: 30px !important;
-}
-
-.btn-action {
-    padding: 7px 14px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.8rem;
-    transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-    margin-right: 5px;
-}
-
-.btn-download {
-    background: #f0f5ff;
-    color: #6b9dff;
-}
-
-.btn-download:hover {
-    background: #dbe4ff;
-}
-
-.btn-delete {
-    background: #fff0f5;
-    color: #ff6b9d;
-}
-
-.btn-delete:hover {
-    background: #ffe0ec;
-}
-
-/* ========== UPLOAD ZONE ========== */
-.upload-card {
-    padding: 15px;
-}
-
-.upload-zone {
-    border: 3px dashed #ffd1e0;
-    border-radius: 20px;
-    padding: 50px 30px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: #fdf7fa;
-}
-
-.upload-zone:hover {
-    border-color: #ff6b9d;
-    background: #fff5f8;
-}
-
-.upload-zone h3 {
-    margin: 10px 0;
-    color: #4a3040;
-}
-
-.upload-zone p {
-    color: #999;
-    margin-bottom: 15px;
-}
-
-/* ========== STORAGE PAGE ========== */
-.storage-detail {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    padding: 30px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.storage-circle {
-    position: relative;
-    width: 180px;
-    height: 180px;
-}
-
-.circular-chart {
-    width: 100%;
-    height: 100%;
-}
-
-.storage-circle-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.storage-circle-text span {
-    display: block;
-    font-size: 2rem;
-    font-weight: 800;
-    color: #ff6b9d;
-}
-
-.storage-circle-text small {
-    color: #999;
-    font-size: 0.8rem;
-}
-
-.storage-info-detail {
-    flex: 1;
-    min-width: 200px;
-}
-
-.storage-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid #f0e0f0;
-}
-
-.storage-row span {
-    color: #999;
-}
-
-.storage-row strong {
-    color: #4a3040;
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 70px;
-    }
-    
-    .sidebar .sidebar-brand span,
-    .sidebar .nav-item span,
-    .sidebar .storage-mini-info,
-    .sidebar .storage-mini .progress-bar {
-        display: none;
-    }
-    
-    .main-content {
-        margin-left: 70px;
-    }
-    
-    .user-info, .user-role {
-        display: none;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .page-content {
-        padding: 15px;
-    }
-    
-    .storage-detail {
-        flex-direction: column;
-    }
-}
-
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #e0d0e0; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #ff6b9d; }
-
-/* ========== PRICING ========== */
-.pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
-}
-
-.pricing-card {
-    background: white;
-    border-radius: 20px;
-    padding: 35px 25px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    border: 2px solid #f0e0f0;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.pricing-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-}
-
-.pricing-card.popular {
-    border-color: #ff6b9d;
-    box-shadow: 0 10px 30px rgba(255, 107, 157, 0.15);
-}
-
-.pricing-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #e0e0e0;
-    color: #666;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-}
-
-.popular-badge {
-    background: #ff6b9d;
-    color: white;
-}
-
-.pricing-card h3 {
-    margin: 15px 0 5px;
-    font-size: 1.3rem;
-    color: #4a3040;
-}
-
-.pricing-price {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #ff6b9d;
-    margin: 10px 0;
-}
-
-.pricing-price span {
-    font-size: 0.9rem;
-    font-weight: 400;
-    color: #999;
-}
-
-.pricing-features {
-    list-style: none;
-    text-align: left;
-    margin: 20px 0;
-}
-
-.pricing-features li {
-    padding: 8px 0;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.btn-pricing {
-    width: 100%;
-    padding: 14px;
-    border-radius: 15px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-    border: none;
-}
-
-.btn-pricing.disabled {
-    background: #f0e0f0;
-    color: #999;
-    cursor: not-allowed;
-}
-
-.btn-upgrade {
-    background: linear-gradient(135deg, #ff6b9d, #ff85b3);
-    color: white;
-}
-
-.btn-upgrade:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
-}
-
-/* Badge di sidebar */
-.license-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 10px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    margin-left: 8px;
-}
-
-.license-free { background: #e0e0e0; color: #666; }
-.license-pro { background: #ff6b9d; color: white; }
-.license-ultimate { background: #9b59b6; color: white; }
-
-/* ========== BILLING TABS ========== */
-.billing-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
-    justify-content: center;
-}
-
-.billing-tab {
-    padding: 12px 25px;
-    border: 2px solid #ffd1e0;
-    background: white;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-    color: #999;
-}
-
-.billing-tab.active {
-    background: linear-gradient(135deg, #ff6b9d, #ff85b3);
-    color: white;
-    border-color: transparent;
-    box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
-}
-
-.billing-tab:hover {
-    border-color: #ff6b9d;
-    color: #ff6b9d;
-}
-
-.billing-tab.active:hover {
-    color: white;
-}
-</style>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    </head>
-    <body>
-        <div class="app-container">
-            
-            <!-- SIDEBAR -->
-            <aside class="sidebar" id="sidebar" style="display:none;">
-                <div class="sidebar-brand">
-                    <i class="fas fa-cloud"></i>
-                    <span>CloudFile</span>
-                </div>
-                
-                <nav class="sidebar-nav">
-        <a href="#" class="nav-item active" onclick="showPage('dashboard')">
-            <i class="fas fa-th-large"></i> Dashboard
-        </a>
-        <a href="#" class="nav-item" onclick="showPage('files')">
-            <i class="fas fa-folder"></i> My Files
-        </a>
-        <a href="#" class="nav-item" onclick="showPage('upload')">
-            <i class="fas fa-cloud-upload-alt"></i> Upload
-        </a>
-        <a href="#" class="nav-item" onclick="showPage('storage')">
-            <i class="fas fa-database"></i> Storage
-        </a>
-        <a href="#" class="nav-item" onclick="showPage('pricing')">
-            <i class="fas fa-crown"></i> Upgrade
-        </a>
-    </nav>
-                
-                <div class="sidebar-footer">
-                    <div class="storage-mini">
-                        <i class="fas fa-hard-drive"></i>
-                        <div class="storage-mini-info">
-                            <span class="storage-mini-label">Your Storage</span>
-                            <span class="storage-mini-value" id="sidebarStorage">0 MB / 1 GB</span>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress" id="sidebarStorageBar" style="width:0%;"></div>
-                    </div>
-                </div>
-            </aside>
-            
-            <!-- MAIN CONTENT -->
-            <main class="main-content">
-                
-                <!-- HEADER -->
-                <header class="topbar" id="topbar" style="display:none;">
-                    <button class="btn-toggle" onclick="toggleSidebar()">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    
-                    <div class="topbar-search">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchFiles" placeholder="Search files..." oninput="searchFiles()">
-                    </div>
-                    
-                    <div class="topbar-right">
-                        
-                        <!-- AVATAR -->
-                        <div class="avatar-wrapper" onclick="document.getElementById('avatarInput').click()" title="Ganti foto profil">
-                            <div class="avatar-display" id="avatarDisplay">🌸</div>
-                        </div>
-                        <input type="file" id="avatarInput" accept="image/*" onchange="changeAvatar(event)" style="display:none;">
-                        
-                        <div class="user-info">
-                            <span class="user-name-top" id="userNameTop">Hello, User</span>
-                            <span class="user-role">Welcome back</span>
-                        </div>
-                        
-                        <button class="btn-logout-top" onclick="logout()">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
-                </header>
-                
-                <!-- PAGE CONTENT -->
-                <div class="page-content" id="pageContent">
-                    
-                    <!-- AUTH PAGE -->
-                    <div id="authPage" class="page active">
-                        <div class="auth-container">
-                            <div class="auth-header">
-                                <i class="fas fa-cloud" style="font-size:3rem; color:#ff6b9d;"></i>
-                                <h2>Welcome to CloudFile</h2>
-                                <p>Sign in to your dashboard</p>
-                            </div>
-                            
-                            <div class="auth-tabs">
-                                <button class="tab active" onclick="showLogin()">Login</button>
-                                <button class="tab" onclick="showRegister()">Register</button>
-                            </div>
-                            
-                            <div id="loginForm">
-                                <div class="form-group">
-                                    <label><i class="fas fa-envelope"></i> Email</label>
-                                    <input type="email" id="loginEmail" placeholder="contoh@email.com">
-                                </div>
-                                <div class="form-group">
-                                    <label><i class="fas fa-lock"></i> Password</label>
-                                    <input type="password" id="loginPassword" placeholder="Password">
-                                </div>
-                                <button class="btn-primary" onclick="doLogin()">
-                                    <i class="fas fa-sign-in-alt"></i> Login
-                                </button>
-                            </div>
-                            
-                        <div id="registerForm" style="display:none;">
-        <div class="form-group">
-            <label><i class="fas fa-user"></i> Nama</label>
-            <input type="text" id="regName" placeholder="Nama lengkap">
-        </div>
-        <div class="form-group">
-            <label><i class="fas fa-envelope"></i> Email</label>
-            <input type="email" id="regEmail" placeholder="contoh@email.com">
-        </div>
-        <div class="form-group">
-            <label><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="regPassword" placeholder="Min 6 karakter">
-        </div>
-        <button class="btn-primary" onclick="doRegister()">
-            <i class="fas fa-user-plus"></i> Register
-        </button>
-    </div>
-                        </div>
-                    </div>
-                    
-                    <!-- DASHBOARD PAGE -->
-                    <div id="dashboardPage" class="page">
-                        <div class="page-header">
-                            <h2><i class="fas fa-th-large"></i> Dashboard</h2>
-                            <p>Your Dashboard is updated</p>
-                        </div>
-                        
-                        <!-- STATS -->
-                        <div class="stats-grid">
-                            <div class="stat-card pink">
-                                <div class="stat-icon"><i class="fas fa-database"></i></div>
-                                <div class="stat-info">
-                                    <span class="stat-label">Your Storage</span>
-                                    <span class="stat-value" id="dashStorage">0 MB / 1 GB</span>
-                                </div>
-                            </div>
-                            <div class="stat-card blue">
-                                <div class="stat-icon"><i class="fas fa-folder-open"></i></div>
-                                <div class="stat-info">
-                                    <span class="stat-label">Total Files</span>
-                                    <span class="stat-value" id="dashTotalFiles">0</span>
-                                </div>
-                            </div>
-                            <div class="stat-card green">
-                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                                <div class="stat-info">
-                                    <span class="stat-label">Latest Update</span>
-                                    <span class="stat-value" id="dashLatestUpdate">-</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- RECENT FILES -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3><i class="fas fa-clock"></i> Recent Files</h3>
-                                <button class="btn-sm" onclick="showPage('files')">View All</button>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="file-table">
-                                    <thead>
-                                        <tr>
-                                            <th>File</th>
-                                            <th>Size</th>
-                                            <th>Date</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="recentFilesTable">
-                                        <tr>
-                                            <td colspan="4" class="empty-cell">No files yet</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- FILES PAGE -->
-                    <div id="filesPage" class="page">
-                        <div class="page-header">
-                            <h2><i class="fas fa-folder"></i> My Files</h2>
-                            <p>Manage all your files</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>All Files</h3>
-                                <button class="btn-primary btn-sm" onclick="showPage('upload')">
-                                    <i class="fas fa-plus"></i> Upload
-                                </button>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="file-table">
-                                    <thead>
-                                        <tr>
-                                            <th>File</th>
-                                            <th>Size</th>
-                                            <th>Date</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="filesTable">
-                                        <tr>
-                                            <td colspan="4" class="empty-cell">No files uploaded yet</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- UPLOAD PAGE -->
-                    <div id="uploadPage" class="page">
-                        <div class="page-header">
-                            <h2><i class="fas fa-cloud-upload-alt"></i> Upload Files</h2>
-                            <p>Upload your files to cloud storage</p>
-                        </div>
-                        
-                        <div class="card upload-card">
-                            <div class="upload-zone" id="dropZone">
-                                <i class="fas fa-cloud-upload-alt" style="font-size:4rem; color:#ff6b9d;"></i>
-                                <h3>Drag & Drop files here</h3>
-                                <p>or click to browse</p>
-                                <input type="file" id="fileInput" multiple style="display:none;">
-                                <button class="btn-primary" onclick="document.getElementById('fileInput').click(); setTimeout(uploadFiles, 500);">
-                                    <i class="fas fa-folder-open"></i> Browse & Upload Files
-                                </button>
-                            </div>
-                            
-                            <div id="uploadProgressArea" style="display:none; margin-top:20px;">
-                                <div class="progress-bar">
-                                    <div class="progress" id="uploadProgressBar" style="width:0%;"></div>
-                                </div>
-                                <p id="uploadStatusText" style="text-align:center; margin-top:10px; color:#666;"></p>
-                            </div>
-                            
-                            <div id="uploadedList" style="margin-top:20px;"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- STORAGE PAGE -->
-                    <!-- PRICING PAGE -->
-    <div id="pricingPage" class="page">
-        <div class="page-header">
-            <h2><i class="fas fa-crown"></i> Upgrade Plan</h2>
-            <p>Pilih plan premium untuk storage lebih besar!</p>
-        </div>
-
-        <!-- BILLING TABS -->
-        <div class="billing-tabs">
-            <button class="billing-tab active" onclick="showBilling('weekly')">📅 Mingguan</button>
-            <button class="billing-tab" onclick="showBilling('monthly')">📆 Bulanan</button>
-            <button class="billing-tab" onclick="showBilling('yearly')">🎯 Tahunan</button>
-        </div>
-
-        <!-- WEEKLY PLANS -->
-        <div id="weeklyPlans" class="pricing-grid">
-            <div class="pricing-card">
-                <i class="fas fa-cloud" style="font-size:3rem; color:#b0b0b0;"></i>
-                <h3>Free</h3>
-                <p class="pricing-price">Rp 0<span>/minggu</span></p>
-                <ul class="pricing-features">
-                    <li>✅ 5 GB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ Basic Support</li>
-                </ul>
-                <button class="btn-pricing disabled" disabled>Current Plan</button>
-            </div>
-
-            <div class="pricing-card popular">
-                <div class="pricing-badge popular-badge">🔥 Popular</div>
-                <i class="fas fa-star" style="font-size:3rem; color:#ff6b9d;"></i>
-                <h3>Pro Weekly</h3>
-                <p class="pricing-price">Rp 15k<span>/minggu</span></p>
-                <ul class="pricing-features">
-                    <li>✅ 256 GB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ Priority Support</li>
-                    <li>✅ No Ads</li>
-                </ul>
-                <button class="btn-pricing btn-upgrade" onclick="upgradePlan('CLOUD-PRO-2026')">
-                    <i class="fas fa-crown"></i> Upgrade Pro
-                </button>
-            </div>
-
-            <div class="pricing-card">
-                <i class="fas fa-gem" style="font-size:3rem; color:#9b59b6;"></i>
-                <h3>Ultimate Weekly</h3>
-                <p class="pricing-price">Rp 35k<span>/minggu</span></p>
-                <ul class="pricing-features">
-                    <li>✅ 1 TB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ VIP Support</li>
-                    <li>✅ Custom Domain</li>
-                </ul>
-                <button class="btn-pricing btn-upgrade" onclick="upgradePlan('CLOUD-ULTIMATE-2026')">
-                    <i class="fas fa-gem"></i> Upgrade Ultimate
-                </button>
-            </div>
-        </div>
-
-        <!-- MONTHLY PLANS -->
-        <div id="monthlyPlans" class="pricing-grid" style="display:none;">
-            <div class="pricing-card">
-                <i class="fas fa-cloud" style="font-size:3rem; color:#b0b0b0;"></i>
-                <h3>Free</h3>
-                <p class="pricing-price">Rp 0<span>/bulan</span></p>
-                <ul class="pricing-features">
-                    <li>✅ 5 GB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ Basic Support</li>
-                </ul>
-                <button class="btn-pricing disabled" disabled>Current Plan</button>
-            </div>
-
-            <div class="pricing-card popular">
-                <div class="pricing-badge popular-badge">🔥 Best Value</div>
-                <i class="fas fa-star" style="font-size:3rem; color:#ff6b9d;"></i>
-                <h3>Pro Monthly</h3>
-                <p class="pricing-price">Rp 50k<span>/bulan</span></p>
-                <ul class="pricing-features">
-                    <li>✅ 256 GB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ Priority Support</li>
-                    <li>✅ No Ads</li>
-                </ul>
-                <button class="btn-pricing btn-upgrade" onclick="upgradePlan('CLOUD-PRO-2026')">
-                    <i class="fas fa-crown"></i> Upgrade Pro
-                </button>
-            </div>
-
-            <div class="pricing-card">
-                <i class="fas fa-gem" style="font-size:3rem; color:#9b59b6;"></i>
-                <h3>Ultimate Monthly</h3>
-                <p class="pricing-price">Rp 120k<span>/bulan</span></p>
-                <ul class="pricing-features">
-                    <li>✅ 1 TB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ VIP Support</li>
-                    <li>✅ Custom Domain</li>
-                </ul>
-                <button class="btn-pricing btn-upgrade" onclick="upgradePlan('CLOUD-ULTIMATE-2026')">
-                    <i class="fas fa-gem"></i> Upgrade Ultimate
-                </button>
-            </div>
-        </div>
-
-        <!-- YEARLY PLANS -->
-        <div id="yearlyPlans" class="pricing-grid" style="display:none;">
-            <div class="pricing-card">
-                <i class="fas fa-cloud" style="font-size:3rem; color:#b0b0b0;"></i>
-                <h3>Free</h3>
-                <p class="pricing-price">Rp 0<span>/tahun</span></p>
-                <ul class="pricing-features">
-                    <li>✅ 5 GB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ Basic Support</li>
-                </ul>
-                <button class="btn-pricing disabled" disabled>Current Plan</button>
-            </div>
-
-            <div class="pricing-card popular">
-                <div class="pricing-badge popular-badge">💰 Hemat 50%</div>
-                <i class="fas fa-star" style="font-size:3rem; color:#ff6b9d;"></i>
-                <h3>Pro Yearly</h3>
-                <p class="pricing-price">Rp 300k<span>/tahun</span></p>
-                <p style="color:#999; font-size:0.8rem; text-decoration:line-through;">Rp 600k</p>
-                <ul class="pricing-features">
-                    <li>✅ 256 GB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ Priority Support</li>
-                    <li>✅ No Ads</li>
-                    <li>✅ 2 Months Free!</li>
-                </ul>
-                <button class="btn-pricing btn-upgrade" onclick="upgradePlan('CLOUD-PRO-2026')">
-                    <i class="fas fa-crown"></i> Upgrade Pro
-                </button>
-            </div>
-
-            <div class="pricing-card">
-                <i class="fas fa-gem" style="font-size:3rem; color:#9b59b6;"></i>
-                <h3>Ultimate Yearly</h3>
-                <p class="pricing-price">Rp 720k<span>/tahun</span></p>
-                <p style="color:#999; font-size:0.8rem; text-decoration:line-through;">Rp 1.44jt</p>
-                <ul class="pricing-features">
-                    <li>✅ 1 TB Storage</li>
-                    <li>✅ Upload/Download</li>
-                    <li>✅ VIP Support</li>
-                    <li>✅ Custom Domain</li>
-                    <li>✅ 6 Months Free!</li>
-                </ul>
-                <button class="btn-pricing btn-upgrade" onclick="upgradePlan('CLOUD-ULTIMATE-2026')">
-                    <i class="fas fa-gem"></i> Upgrade Ultimate
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    const API_URL = 'https://tesa25.pythonanywhere.com/api';
-    let authToken = localStorage.getItem('token');
-    let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+const API_URL = 'https://tesa25.pythonanywhere.com/api';
+let authToken = localStorage.getItem('token');
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null'); // ← TAMBAHIN INI
 
     function showLogin() {
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginTab').style.background = '#ff6b9d';
-        document.getElementById('loginTab').style.color = 'white';
-        document.getElementById('registerTab').style.background = '#ddd';
-        document.getElementById('registerTab').style.color = 'black';
-    }
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('registerForm').style.display = 'none';
+}
 
-    function showRegister() {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        document.getElementById('registerTab').style.background = '#ff6b9d';
-        document.getElementById('registerTab').style.color = 'white';
-        document.getElementById('loginTab').style.background = '#ddd';
-        document.getElementById('loginTab').style.color = 'black';
-    }
+function showRegister() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+}
 
-    async function doLogin() {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        if (!email || !password) { alert('Email dan password harus diisi!'); return; }
+async function doLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) { 
+        alert('Email dan password harus diisi!'); 
+        return; 
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        
+        if (!response.ok) {
+            const data = await response.json();
+            alert(data.message || 'Login gagal');
+            return;
+        }
+        
+        const data = await response.json();
+        authToken = data.token;
+        currentUser = data.user;
+        localStorage.setItem('token', authToken);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+        
+        showDashboard();
+    } catch (error) {
+        // Gak munculin alert, cuma log di console
+        console.log('Login error:', error);
+    }
+}
+
+async function doRegister() {
+    const name = document.getElementById('regName').value;
+    const email = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPassword').value;
+    if (!name || !email || !password) { 
+        alert('Semua field harus diisi!'); 
+        return; 
+    }
+    if (password.length < 6) { 
+        alert('Password minimal 6 karakter!'); 
+        return; 
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+        const data = await response.json();
+        if (data.error) { alert(data.message); return; }
+        alert('Registrasi berhasil! Silakan login.');
+        showLogin();
+    } catch (error) {
+        console.log('Error:', error);
+    }
+}
+
+function logout() {
+    authToken = null;
+    currentUser = null;
+    localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
+    
+    const avatarDisplay = document.getElementById('avatarDisplay');
+    if (avatarDisplay) {
+        avatarDisplay.style.backgroundImage = '';
+        avatarDisplay.textContent = '🌸';
+    }
+    
+    document.getElementById('authPage').style.display = 'block';
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
+    
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+}
+
+// Tampilkan dashboard
+function showDashboard() {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('sidebar').style.display = 'flex';
+    document.getElementById('topbar').style.display = 'flex';
+    showPage('dashboard');
+    if (currentUser) {
+        document.getElementById('userNameTop').textContent = 'Hello, ' + currentUser.name;
+    }
+    loadAvatar();
+    loadFiles();
+    loadStorageInfo();
+}
+
+async function uploadFiles() {
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        // Coba cari di upload page
+        const allInputs = document.querySelectorAll('input[type="file"]');
+        for (let input of allInputs) {
+            if (input.files && input.files.length > 0) {
+                uploadWithInput(input);
+                return;
+            }
+        }
+        alert('Pilih file dulu!');
+        return;
+    }
+    uploadWithInput(fileInput);
+}
+
+async function uploadWithInput(fileInput) {
+    const files = fileInput.files;
+    const statusDiv = document.getElementById('uploadStatus') || document.getElementById('uploadStatusText');
+    
+    for (let file of files) {
+        if (statusDiv) statusDiv.textContent = 'Uploading ' + file.name + '...';
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
         try {
-            const response = await fetch(`${API_URL}/login`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+            const response = await fetch(`${API_URL}/files/upload`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}` },
+                body: formData
             });
             const data = await response.json();
-            if (data.error) { alert(data.message); return; }
-            authToken = data.token; currentUser = data.user;
-            localStorage.setItem('token', authToken);
-            localStorage.setItem('currentUser', JSON.stringify(data.user));
-            showDashboard();
-        } catch (error) { console.log('Error:', error); }
+            if (data.error) { 
+                if (statusDiv) statusDiv.textContent = 'Gagal: ' + data.message;
+                alert('Upload gagal: ' + data.message);
+                return;
+            }
+            if (statusDiv) statusDiv.textContent = file.name + ' berhasil diupload! ✅';
+            alert(file.name + ' berhasil diupload! ✅');
+        } catch (error) {
+            if (statusDiv) statusDiv.textContent = 'Gagal upload';
+            console.error(error);
+        }
     }
+    
+    setTimeout(() => { 
+        loadFiles(); 
+        loadStorageInfo();
+        if (statusDiv) statusDiv.textContent = ''; 
+    }, 1500);
+}
 
-    async function doRegister() {
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        if (!name || !email || !password) { alert('Semua field harus diisi!'); return; }
-        if (password.length < 6) { alert('Password minimal 6 karakter!'); return; }
-        try {
-            const response = await fetch(`${API_URL}/register`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password })
-            });
-            const data = await response.json();
-            if (data.error) { alert(data.message); return; }
-            alert('Registrasi berhasil! Silakan login.');
-            showLogin();
-        } catch (error) { console.log('Error:', error); }
+async function loadFiles() {
+    try {
+        const response = await fetch(`${API_URL}/files`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        document.getElementById('totalFiles').textContent = data.total || 0;
+        const fileListDiv = document.getElementById('fileList');
+        
+        if (!data.files || data.files.length === 0) {
+            fileListDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">Belum ada file</p>';
+            return;
+        }
+        
+        fileListDiv.innerHTML = data.files.map(file => `
+            <div class="file-item">
+                <div>
+                    <strong>📄 ${file.name}</strong>
+                    <br>
+                    <small style="color:#666;">${file.size_readable}</small>
+                </div>
+                <div>
+                    <button onclick="downloadFile('${file.name}')" class="btn-action btn-download">Download</button>
+                    <button onclick="deleteFile('${file.name}')" class="btn-action btn-delete">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error(error);
     }
+}
 
-    function showDashboard() {
-        document.getElementById('authPage').style.display = 'none';
-        document.getElementById('sidebar').style.display = 'flex';
-        document.getElementById('topbar').style.display = 'flex';
-        showPage('dashboard');
-        if (currentUser) document.getElementById('userNameTop').textContent = 'Hello, ' + currentUser.name;
+async function downloadFile(filename) {
+    try {
+        const response = await fetch(`${API_URL}/files/download/${filename}`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        if (data.download_url) {
+            window.open(data.download_url, '_blank');
+        } else {
+            alert('Gagal download');
+        }
+    } catch (error) {
+        alert('Gagal download');
     }
+}
 
-    function logout() {
-        authToken = null; currentUser = null;
-        localStorage.removeItem('token'); localStorage.removeItem('currentUser');
-        document.getElementById('authPage').style.display = 'block';
-        document.getElementById('sidebar').style.display = 'none';
-        document.getElementById('topbar').style.display = 'none';
+async function deleteFile(filename) {
+    if (!confirm('Yakin hapus ' + filename + '?')) return;
+    try {
+        const response = await fetch(`${API_URL}/files/delete/${filename}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        if (data.error) { alert(data.message); return; }
+        alert('File dihapus');
+        loadFiles();
+        loadStorageInfo();
+    } catch (error) {
+        alert('Gagal hapus file');
     }
+}
 
-    function showPage(p) {
-        document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-        const m = {'dashboard':'dashboardPage','files':'filesPage','upload':'uploadPage','storage':'storagePage','pricing':'pricingPage'};
-        if (m[p]) document.getElementById(m[p]).classList.add('active');
+async function loadStorageInfo() {
+    try {
+        const response = await fetch(`${API_URL}/storage/info`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        document.getElementById('storageInfo').textContent = data.used_readable + ' / ' + data.limit_readable;
+        document.getElementById('storageBar').style.width = data.percentage + '%';
+    } catch (error) {
+        console.error(error);
     }
+}
 
-    window.onload = function() {
-        document.getElementById('sidebar').style.display = 'none';
-        document.getElementById('topbar').style.display = 'none';
-        if (authToken && currentUser) showDashboard();
+// ============================================
+// FITUR FOTO PROFIL
+// ============================================
+
+// Default avatar lucu
+// ============================================
+// AVATAR PER USER (disimpan berdasarkan email)
+// ============================================
+
+const defaultAvatars = [
+    '🌸', '💕', '🎀', '🦄', '🍰', '💖', '✨', '🌈', 
+    '🐰', '🍭', '💝', '🧸', '🩷', '🎂', '🍬', '🐱',
+    '🐶', '🍩', '🎪', '🌟', '💎', '🎯', '🌷', '🎵'
+];
+
+function getRandomAvatar() {
+    return defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+}
+
+// Simpan avatar berdasarkan email user
+function getAvatarKey() {
+    const email = currentUser?.email || 'default';
+    return `avatar_${email}`;
+}
+
+function getAvatarImgKey() {
+    const email = currentUser?.email || 'default';
+    return `avatarImg_${email}`;
+}
+
+function getAvatarTypeKey() {
+    const email = currentUser?.email || 'default';
+    return `avatarType_${email}`;
+}
+
+function changeAvatar(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imgUrl = e.target.result;
+            
+            // Simpan per user
+            localStorage.setItem(getAvatarImgKey(), imgUrl);
+            localStorage.setItem(getAvatarTypeKey(), 'image');
+            
+            const avatarDisplay = document.getElementById('avatarDisplay');
+            if (avatarDisplay) {
+                avatarDisplay.style.backgroundImage = `url(${imgUrl})`;
+                avatarDisplay.style.backgroundSize = 'cover';
+                avatarDisplay.style.backgroundPosition = 'center';
+                avatarDisplay.textContent = '';
+            }
+            
+            alert('Foto profil berhasil diupdate! 🌸');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function resetAvatar() {
+    localStorage.removeItem(getAvatarImgKey());
+    localStorage.removeItem(getAvatarTypeKey());
+    
+    const newAvatar = getRandomAvatar();
+    localStorage.setItem(getAvatarKey(), newAvatar);
+    
+    const avatarDisplay = document.getElementById('avatarDisplay');
+    if (avatarDisplay) {
+        avatarDisplay.style.backgroundImage = '';
+        avatarDisplay.textContent = newAvatar;
+    }
+}
+
+function loadAvatar() {
+    const avatarType = localStorage.getItem(getAvatarTypeKey());
+    const avatarDisplay = document.getElementById('avatarDisplay');
+    
+    if (!avatarDisplay) return;
+    
+    if (avatarType === 'image') {
+        const imgUrl = localStorage.getItem(getAvatarImgKey());
+        if (imgUrl) {
+            avatarDisplay.style.backgroundImage = `url(${imgUrl})`;
+            avatarDisplay.style.backgroundSize = 'cover';
+            avatarDisplay.style.backgroundPosition = 'center';
+            avatarDisplay.textContent = '';
+        }
+    } else {
+        const savedAvatar = localStorage.getItem(getAvatarKey());
+        if (savedAvatar) {
+            avatarDisplay.textContent = savedAvatar;
+        } else {
+            // Avatar baru untuk user baru
+            const newAvatar = getRandomAvatar();
+            localStorage.setItem(getAvatarKey(), newAvatar);
+            avatarDisplay.textContent = newAvatar;
+        }
+    }
+}
+
+// ============================================
+// PAGE NAVIGATION & NEW FUNCTIONS
+// ============================================
+
+function showPage(pageName) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    
+    const pageMap = {
+        'dashboard': 'dashboardPage',
+        'files': 'filesPage',
+        'upload': 'uploadPage',
+        'storage': 'storagePage'
     };
-    </script>
-    </body>
-    </html>
+    
+    const pageId = pageMap[pageName];
+    if (pageId) {
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById('authPage').classList.remove('active');
+    }
+    
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
+    if (pageName === 'files') loadFilesTable();
+    if (pageName === 'storage') loadStorageDetail();
+    if (pageName === 'dashboard') {
+        loadStorageInfo();
+        loadFiles();
+    }
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+function loadFilesTable() {
+    const filesTable = document.getElementById('filesTable');
+    if (!filesTable) return;
+    
+    fetch(`${API_URL}/files`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.files || data.files.length === 0) {
+            filesTable.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#ccc;padding:30px;">No files uploaded yet</td></tr>';
+            return;
+        }
+        
+        filesTable.innerHTML = data.files.map(file => `
+            <tr>
+                <td><i class="fas fa-file" style="color:#ff6b9d; margin-right:8px;"></i><strong>${file.name}</strong></td>
+                <td>${file.size_readable}</td>
+                <td>${new Date(file.last_modified).toLocaleDateString('id-ID')}</td>
+                <td>
+                    <button onclick="downloadFile('${file.name}')" class="btn-action btn-download"><i class="fas fa-download"></i></button>
+                    <button onclick="deleteFile('${file.name}')" class="btn-action btn-delete"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+        
+        const totalFiles = document.getElementById('dashTotalFiles');
+        if (totalFiles) totalFiles.textContent = data.total || 0;
+    });
+}
+
+function loadRecentFiles() {
+    const recentTable = document.getElementById('recentFilesTable');
+    if (!recentTable) return;
+    
+    fetch(`${API_URL}/files`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.files || data.files.length === 0) {
+            recentTable.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#ccc;padding:30px;">No files yet</td></tr>';
+            return;
+        }
+        
+        const recent = data.files.slice(0, 5);
+        recentTable.innerHTML = recent.map(file => `
+            <tr>
+                <td><i class="fas fa-file" style="color:#ff6b9d; margin-right:8px;"></i><strong>${file.name}</strong></td>
+                <td>${file.size_readable}</td>
+                <td>${new Date(file.last_modified).toLocaleDateString('id-ID')}</td>
+                <td>
+                    <button onclick="downloadFile('${file.name}')" class="btn-action btn-download"><i class="fas fa-download"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    });
+}
+
+function loadStorageDetail() {
+    fetch(`${API_URL}/storage/info`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const percent = data.percentage || 0;
+        const storagePercent = document.getElementById('storagePercent');
+        const storageUsed = document.getElementById('storageUsed');
+        const storageAvailable = document.getElementById('storageAvailable');
+        const storageCircleFill = document.getElementById('storageCircleFill');
+        
+        if (storagePercent) storagePercent.textContent = percent.toFixed(1) + '%';
+        if (storageUsed) storageUsed.textContent = data.used_readable;
+        if (storageAvailable) {
+            const available = data.limit_bytes - data.used_bytes;
+            if (available <= 0) {
+                storageAvailable.textContent = '0 B';
+            } else {
+                let b = available;
+                const units = ['B', 'KB', 'MB', 'GB'];
+                let i = 0;
+                while (b >= 1024 && i < units.length - 1) { b /= 1024; i++; }
+                storageAvailable.textContent = b.toFixed(2) + ' ' + units[i];
+            }
+        }
+        if (storageCircleFill) storageCircleFill.setAttribute('stroke-dasharray', percent + ', 100');
+    });
+}
+
+// Override loadStorageInfo untuk update sidebar juga
+const originalLoadStorage = loadStorageInfo;
+loadStorageInfo = function() {
+    fetch(`${API_URL}/storage/info`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+        // Dashboard stats
+        const dashStorage = document.getElementById('dashStorage');
+        if (dashStorage) dashStorage.textContent = data.used_readable + ' / ' + data.limit_readable;
+        
+        // Sidebar
+        const sidebarStorage = document.getElementById('sidebarStorage');
+        if (sidebarStorage) sidebarStorage.textContent = data.used_readable + ' / ' + data.limit_readable;
+        
+        const sidebarBar = document.getElementById('sidebarStorageBar');
+        if (sidebarBar) sidebarBar.style.width = data.percentage + '%';
+        
+        // Legacy elements
+        const storageInfo = document.getElementById('storageInfo');
+        if (storageInfo) storageInfo.textContent = data.used_readable + ' / ' + data.limit_readable;
+        
+        const storageBar = document.getElementById('storageBar');
+        if (storageBar) storageBar.style.width = data.percentage + '%';
+        
+        // Total files legacy
+        const totalFilesLegacy = document.getElementById('totalFiles');
+        if (totalFilesLegacy) totalFilesLegacy.textContent = data.total || 0;
+    });
+};
+
+// Override loadFiles untuk update recent juga
+const originalLoadFiles = loadFiles;
+loadFiles = function() {
+    originalLoadFiles();
+    loadRecentFiles();
+    loadFilesTable();
+    
+    // Update latest update
+    fetch(`${API_URL}/files`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const latestUpdate = document.getElementById('dashLatestUpdate');
+        if (latestUpdate && data.files && data.files.length > 0) {
+            latestUpdate.textContent = new Date(data.files[0].last_modified).toLocaleDateString('id-ID');
+        }
+    });
+};
+
+// Search files
+function searchFiles() {
+    const query = document.getElementById('searchFiles')?.value?.toLowerCase() || '';
+    const rows = document.querySelectorAll('#filesTable tr, #recentFilesTable tr');
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+}
+
+// ========== UPGRADE PLAN ==========
+async function upgradePlan(licenseKey) {
+    if (!authToken || !currentUser) {
+        alert('Login dulu!');
+        return;
+    }
+    
+    const confirmUpgrade = confirm(`Upgrade ke ${licenseKey}?\n\nKlik OK untuk konfirmasi.`);
+    if (!confirmUpgrade) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/upgrade`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ license_key: licenseKey })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            alert(data.message);
+            return;
+        }
+        
+        alert(`🎉 Upgrade berhasil!\n\nPlan: ${data.license_type}\nStorage: ${data.storage}`);
+        loadStorageInfo();
+        showPage('dashboard');
+        
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// ========== BILLING TABS ==========
+function showBilling(type) {
+    document.getElementById('weeklyPlans').style.display = 'none';
+    document.getElementById('monthlyPlans').style.display = 'none';
+    document.getElementById('yearlyPlans').style.display = 'none';
+    
+    if (type === 'weekly') document.getElementById('weeklyPlans').style.display = 'grid';
+    if (type === 'monthly') document.getElementById('monthlyPlans').style.display = 'grid';
+    if (type === 'yearly') document.getElementById('yearlyPlans').style.display = 'grid';
+    
+    document.querySelectorAll('.billing-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+// ========== UPLOAD FILE ==========
+async function uploadFiles() {
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        alert('Pilih file dulu!');
+        return;
+    }
+    const files = fileInput.files;
+    for (let file of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const response = await fetch(`${API_URL}/files/upload`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}` },
+                body: formData
+            });
+            const data = await response.json();
+            if (data.error) { alert('Upload gagal: ' + data.message); return; }
+            alert(file.name + ' berhasil diupload! ✅');
+        } catch (error) { console.log(error); }
+    }
+    loadFiles();
+}
+
+async function loadFiles() {
+    try {
+        const response = await fetch(`${API_URL}/files`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        const tbody = document.getElementById('recentFilesTable') || document.getElementById('filesTable');
+        if (!data.files || data.files.length === 0) {
+            if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;">No files yet</td></tr>';
+            return;
+        }
+        if (tbody) {
+            tbody.innerHTML = data.files.map(f => `
+                <tr>
+                    <td>📄 ${f.name}</td>
+                    <td>${f.size_readable}</td>
+                    <td>${new Date(f.last_modified).toLocaleDateString('id-ID')}</td>
+                    <td>
+                        <button onclick="downloadFile('${f.name}')" style="background:#ff6b9d;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">Download</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        document.getElementById('dashTotalFiles').textContent = data.total || 0;
+    } catch (e) { console.log(e); }
+}
+
+async function downloadFile(filename) {
+    try {
+        const response = await fetch(`${API_URL}/files/download/${filename}`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        if (data.download_url) window.open(data.download_url, '_blank');
+    } catch (e) { console.log(e); }
+}
+
+// ========== AVATAR ==========
+const defaultAvatars = ['🌸','💕','🎀','🦄','🍰','💖','✨','🌈','🐰','🍭'];
+
+function changeAvatar(event) {
+    const file = event.target.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = e.target.result;
+        localStorage.setItem('avatar_' + (currentUser?.email || 'default'), img);
+        document.getElementById('avatarDisplay').style.backgroundImage = `url(${img})`;
+        document.getElementById('avatarDisplay').style.backgroundSize = 'cover';
+        document.getElementById('avatarDisplay').textContent = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+function loadAvatar() {
+    const avatar = localStorage.getItem('avatar_' + (currentUser?.email || 'default'));
+    const display = document.getElementById('avatarDisplay');
+    if (!display) return;
+    if (avatar) {
+        display.style.backgroundImage = `url(${avatar})`;
+        display.style.backgroundSize = 'cover';
+        display.textContent = '';
+    } else {
+        display.textContent = defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+    }
+}
+
+window.onload = function() {
+    // Sembunyikan dulu sidebar & topbar
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
+    document.getElementById('authPage').style.display = 'block';
+    
+    if (authToken && currentUser) {
+        showDashboard();
+    }
+    
+    if (currentUser) {
+        loadAvatar();
+    }
+};
