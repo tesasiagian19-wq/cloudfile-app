@@ -474,79 +474,43 @@ function showBilling(type) {
     event.target.classList.add('active');
 }
 
-// ========== UPLOAD FILE ==========
-async function uploadFiles() {
-    const fileInput = document.getElementById('fileInput');
-    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-        alert('Pilih file dulu!');
-        return;
-    }
-    const files = fileInput.files;
-    for (let file of files) {
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-            const response = await fetch(`${API_URL}/files/upload`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${authToken}` },
-                body: formData
-            });
-            const data = await response.json();
-            if (data.error) { alert('Upload gagal: ' + data.message); return; }
-            alert(file.name + ' berhasil diupload! ✅');
-        } catch (error) { console.log(error); }
-    }
-    loadFiles();
+// ========== AVATAR ==========
+const defaultAvatars = ['🌸','💕','🎀','🦄','🍰','💖','✨','🌈','🐰','🍭'];
+
+function changeAvatar(event) {
+    const file = event.target.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = e.target.result;
+        localStorage.setItem('avatar_' + (currentUser?.email || 'default'), img);
+        const display = document.getElementById('avatarDisplay');
+        if (display) {
+            display.style.backgroundImage = `url(${img})`;
+            display.style.backgroundSize = 'cover';
+            display.textContent = '';
+        }
+    };
+    reader.readAsDataURL(file);
 }
 
-async function loadFiles() {
-    try {
-        const response = await fetch(`${API_URL}/files`, {
-            headers: { 'Authorization': `Bearer ${authToken}` }
-        });
-        const data = await response.json();
-        const tbody = document.getElementById('recentFilesTable') || document.getElementById('filesTable');
-        if (!data.files || data.files.length === 0) {
-            if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;">No files yet</td></tr>';
-            return;
-        }
-        if (tbody) {
-            tbody.innerHTML = data.files.map(f => `
-                <tr>
-                    <td>📄 ${f.name}</td>
-                    <td>${f.size_readable}</td>
-                    <td>${new Date(f.last_modified).toLocaleDateString('id-ID')}</td>
-                    <td>
-                        <button onclick="downloadFile('${f.name}')" style="background:#ff6b9d;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">Download</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-        document.getElementById('dashTotalFiles').textContent = data.total || 0;
-    } catch (e) { console.log(e); }
-}
-
-async function downloadFile(filename) {
-    try {
-        const response = await fetch(`${API_URL}/files/download/${filename}`, {
-            headers: { 'Authorization': `Bearer ${authToken}` }
-        });
-        const data = await response.json();
-        if (data.download_url) window.open(data.download_url, '_blank');
-    } catch (e) { console.log(e); }
+function loadAvatar() {
+    const avatar = localStorage.getItem('avatar_' + (currentUser?.email || 'default'));
+    const display = document.getElementById('avatarDisplay');
+    if (!display) return;
+    if (avatar) {
+        display.style.backgroundImage = `url(${avatar})`;
+        display.style.backgroundSize = 'cover';
+        display.textContent = '';
+    } else {
+        display.textContent = defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+    }
 }
 
 window.onload = function() {
-    // Sembunyikan dulu sidebar & topbar
     document.getElementById('sidebar').style.display = 'none';
     document.getElementById('topbar').style.display = 'none';
     document.getElementById('authPage').style.display = 'block';
-    
-    if (authToken && currentUser) {
-        showDashboard();
-    }
-    
-    if (currentUser) {
-        loadAvatar();
-    }
+    if (authToken && currentUser) showDashboard();
+    if (currentUser) loadAvatar();
 };
