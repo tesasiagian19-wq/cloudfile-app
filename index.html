@@ -639,36 +639,6 @@ async function downloadFile(filename) {
     } catch (e) { console.log(e); }
 }
 
-// ========== AVATAR ==========
-const defaultAvatars = ['🌸','💕','🎀','🦄','🍰','💖','✨','🌈','🐰','🍭'];
-
-function changeAvatar(event) {
-    const file = event.target.files[0];
-    if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const img = e.target.result;
-        localStorage.setItem('avatar_' + (currentUser?.email || 'default'), img);
-        document.getElementById('avatarDisplay').style.backgroundImage = `url(${img})`;
-        document.getElementById('avatarDisplay').style.backgroundSize = 'cover';
-        document.getElementById('avatarDisplay').textContent = '';
-    };
-    reader.readAsDataURL(file);
-}
-
-function loadAvatar() {
-    const avatar = localStorage.getItem('avatar_' + (currentUser?.email || 'default'));
-    const display = document.getElementById('avatarDisplay');
-    if (!display) return;
-    if (avatar) {
-        display.style.backgroundImage = `url(${avatar})`;
-        display.style.backgroundSize = 'cover';
-        display.textContent = '';
-    } else {
-        display.textContent = defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
-    }
-}
-
 window.onload = function() {
     // Sembunyikan dulu sidebar & topbar
     document.getElementById('sidebar').style.display = 'none';
