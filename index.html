@@ -953,6 +953,35 @@ body {
 .billing-tab.active:hover {
     color: white;
 }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .app-container { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; padding: 10px; }
+    .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 5px; padding: 5px; }
+    .nav-item { padding: 8px 12px; font-size: 0.75rem; }
+    .nav-item span { display: none; }
+    .main-content { margin-left: 0; }
+    .topbar { flex-wrap: wrap; padding: 10px 15px; gap: 10px; }
+    .topbar-search { max-width: 100%; order: 3; width: 100%; }
+    .user-info { display: none; }
+    .page-content { padding: 15px; }
+    .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+    .stat-card { padding: 15px; }
+    .auth-container { margin: 20px auto; padding: 25px 20px; }
+    .upload-zone { padding: 30px 15px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .file-table th, .file-table td { padding: 10px 8px; font-size: 0.75rem; }
+    .file-table th:nth-child(3), .file-table td:nth-child(3) { display: none; }
+}
+
+@media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .nav-item { padding: 6px 8px; font-size: 0.7rem; }
+    .page-header h2 { font-size: 1.2rem; }
+    .auth-header h2 { font-size: 1.3rem; }
+}
+
 </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
