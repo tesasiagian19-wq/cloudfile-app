@@ -19,7 +19,7 @@ body {
 }
 
 #authPage.page.active {
-    background: linear-gradient(135deg, #ffb6c1, #ffc0cb, #ffd1e0, #ffe4ec, #fff0f5);
+    background: url('background3.jpg') center/cover no-repeat;
     min-height: 100vh;
 }
 
