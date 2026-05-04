@@ -1461,7 +1461,7 @@ function showDashboard() {
     loadFiles();
     loadStorageInfo();
 }
-
+       
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
 
 // ========== AVATAR ==========
@@ -1500,6 +1500,85 @@ async function loadStorageInfo() {
         if (dashStorage) dashStorage.textContent = data.used_readable + ' / ' + data.limit_readable;
         if (sidebarStorage) sidebarStorage.textContent = data.used_readable + ' / ' + data.limit_readable;
     } catch (e) { console.log(e); }
+}
+
+    window.showPage = function(p) {
+    document.querySelectorAll('.page').forEach(x => {
+        if (x) x.classList.remove('active');
+    });
+    
+    const m = {
+        'dashboard': 'dashboardPage',
+        'files': 'filesPage',
+        'upload': 'uploadPage',
+        'storage': 'storagePage',
+        'pricing': 'pricingPage'
+    };
+    
+    const pageId = m[p];
+    if (pageId) {
+        const pageElement = document.getElementById(pageId);
+        if (pageElement) pageElement.classList.add('active');
+    }
+    
+    // Load data sesuai page
+    if (p === 'dashboard') { loadFiles(); loadStorageInfo(); }
+    if (p === 'files') loadFilesTable();
+    if (p === 'storage') loadStorageDetail();
+};
+
+// ========== LOAD FILES TABLE (MY FILES PAGE) ==========
+function loadFilesTable() {
+    const filesTable = document.getElementById('filesTable');
+    if (!filesTable) return;
+    
+    fetch(`${API_URL}/files`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.files || data.files.length === 0) {
+            filesTable.innerHTML = '<tr><td colspan="4" class="empty-cell">No files uploaded yet</td></tr>';
+            return;
+        }
+        filesTable.innerHTML = data.files.map(f => `
+            <tr>
+                <td><i class="fas fa-file" style="color:#ff6b9d;margin-right:8px;"></i><strong>${f.name}</strong></td>
+                <td>${f.size_readable}</td>
+                <td>${new Date(f.last_modified).toLocaleDateString('id-ID')}</td>
+                <td>
+                    <button onclick="downloadFile('${f.name}')" class="btn-action btn-download"><i class="fas fa-download"></i></button>
+                    <button onclick="deleteFile('${f.name}')" class="btn-action btn-delete"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    });
+}
+
+// ========== STORAGE DETAIL PAGE ==========
+function loadStorageDetail() {
+    fetch(`${API_URL}/storage/info`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const sp = document.getElementById('storagePercent');
+        const su = document.getElementById('storageUsed');
+        const sa = document.getElementById('storageAvailable');
+        const sf = document.getElementById('storageCircleFill');
+        if (sp) sp.textContent = (data.percentage || 0).toFixed(1) + '%';
+        if (su) su.textContent = data.used_readable;
+        if (sa) {
+            const avail = data.limit_bytes - data.used_bytes;
+            if (avail <= 0) sa.textContent = '0 B';
+            else {
+                let b = avail; const u = ['B','KB','MB','GB']; let i = 0;
+                while (b >= 1024 && i < u.length-1) { b /= 1024; i++; }
+                sa.textContent = b.toFixed(2) + ' ' + u[i];
+            }
+        }
+        if (sf) sf.setAttribute('stroke-dasharray', (data.percentage || 0) + ', 100');
+    });
 }
 
 // ========== UPLOAD ==========
