@@ -1462,11 +1462,11 @@ function showDashboard() {
     loadStorageInfo();
 }
 
-function showPage(p) {
+window.showPage = function(p) {
     document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
     const m = {'dashboard':'dashboardPage','files':'filesPage','upload':'uploadPage','storage':'storagePage','pricing':'pricingPage'};
     if (m[p]) document.getElementById(m[p]).classList.add('active');
-}
+};
 
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
 
@@ -1509,7 +1509,7 @@ async function loadStorageInfo() {
 }
 
 // ========== UPLOAD ==========
-async function uploadFiles() {
+window.uploadFiles = async function() {
     const fileInput = document.getElementById('fileInput');
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) { alert('Pilih file dulu!'); return; }
     for (let file of fileInput.files) {
@@ -1524,7 +1524,7 @@ async function uploadFiles() {
         } catch (e) { console.log(e); }
     }
     loadFiles(); loadStorageInfo();
-}
+};
 
 async function loadFiles() {
     try {
@@ -1554,12 +1554,11 @@ async function downloadFile(filename) {
 }
 
 // ========== TABS ==========
-function showBilling(type) {
+window.showBilling = function(type) {
     document.getElementById('weeklyPlans').style.display = type==='weekly'?'grid':'none';
     document.getElementById('monthlyPlans').style.display = type==='monthly'?'grid':'none';
     document.getElementById('yearlyPlans').style.display = type==='yearly'?'grid':'none';
-}
-
+};
 async function upgradePlan(key) {
     if (!authToken) { alert('Login dulu!'); return; }
     if (!confirm('Upgrade ke ' + key + '?')) return;
