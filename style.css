@@ -19,7 +19,7 @@ body {
 }
 
 #authPage.page.active {
-    background: url('background3.jpg') center/cover no-repeat;
+    background: url('https://tesasiagian19-wq.github.io/cloudfile-app/background3.jpg') center/cover no-repeat;
     min-height: 100vh;
 }
 
