@@ -1462,12 +1462,6 @@ function showDashboard() {
     loadStorageInfo();
 }
 
-window.showPage = function(p) {
-    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-    const m = {'dashboard':'dashboardPage','files':'filesPage','upload':'uploadPage','storage':'storagePage','pricing':'pricingPage'};
-    if (m[p]) document.getElementById(m[p]).classList.add('active');
-};
-
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
 
 // ========== AVATAR ==========
