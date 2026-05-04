@@ -1473,7 +1473,7 @@ function toggleSidebar() { document.getElementById('sidebar').classList.toggle('
 // ========== AVATAR ==========
 const defaultAvatars = ['🌸','💕','🎀','🦄','🍰','💖','✨','🌈','🐰','🍭'];
 
-function changeAvatar(event) {
+window.changeAvatar = function(event) {
     const file = event.target.files[0];
     if (!file || !file.type.startsWith('image/')) return;
     const reader = new FileReader();
@@ -1484,7 +1484,7 @@ function changeAvatar(event) {
         if (d) { d.style.backgroundImage = `url(${img})`; d.style.backgroundSize = 'cover'; d.textContent = ''; }
     };
     reader.readAsDataURL(file);
-}
+};
 
 function loadAvatar() {
     const avatar = localStorage.getItem('avatar_' + (currentUser?.email || 'default'));
