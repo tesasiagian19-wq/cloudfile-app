@@ -1668,6 +1668,21 @@ async function downloadFile(filename) {
     if (d.download_url) window.open(d.download_url, '_blank');
 }
 
+async function loadStorageInfo() {
+    if (!authToken) return;
+    try {
+        const response = await fetch(`${API_URL}/storage/info`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        const dashStorage = document.getElementById('dashStorage');
+        const sidebarStorage = document.getElementById('sidebarStorage');
+        if (dashStorage) dashStorage.textContent = (data.used_readable || '0 B') + ' / ' + (data.limit_readable || '256 GB');
+        if (sidebarStorage) sidebarStorage.textContent = (data.used_readable || '0 B') + ' / ' + (data.limit_readable || '256 GB');
+    } catch (e) { console.log(e); }
+}
+       
 // ========== TABS ==========
 window.showBilling = function(type) {
     document.getElementById('weeklyPlans').style.display = type==='weekly'?'grid':'none';
