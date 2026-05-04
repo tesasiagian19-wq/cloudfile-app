@@ -982,16 +982,23 @@ body {
     .auth-header h2 { font-size: 1.3rem; }
 }
     #authPage.page.active {
-    width: 100vw !important;
+    display: block !important;
+    width: 100% !important;
+    padding: 30px !important;
     background: url('/cloudfile-app/background3.jpg') center/cover no-repeat !important;
     min-height: 100vh !important;
 }
-            .page-content {
-    padding: 0 !important;
+    #dashboardPage, #filesPage, #uploadPage, #storagePage, #pricingPage {
+    min-height: 100vh;
+    background: #f8f5f8;
+}   
+    .page-content {
+    max-width: 1200px;
+    margin: 0 auto;
 }
-
-.main-content {
-    margin-left: 0 !important;
+    .main-content {
+    width: 100%;
+    background: #f8f5f8;
 }
 </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
