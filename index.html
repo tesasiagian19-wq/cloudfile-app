@@ -1520,22 +1520,29 @@ async function doRegister() {
 function logout() {
     authToken = null; currentUser = null;
     localStorage.removeItem('token'); localStorage.removeItem('currentUser');
+    
     const av = document.getElementById('avatarDisplay');
     if (av) { av.style.backgroundImage = ''; av.textContent = '🌸'; }
     
-    // Hapus class active dari semua page
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // SEMBUNYIKAN SEMUA PAGE DULU
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+    });
     
-    // Tampilkan halaman login
+    // TAMPILKAN LOGIN PAGE
     document.getElementById('authPage').classList.add('active');
     document.getElementById('authPage').style.display = 'block';
-    document.getElementById('sidebar').style.display = 'none';
-    document.getElementById('topbar').style.display = 'none';
-    
-    // Fix posisi login
     document.getElementById('authPage').style.position = 'fixed';
+    document.getElementById('authPage').style.top = '0';
+    document.getElementById('authPage').style.left = '0';
     document.getElementById('authPage').style.width = '100vw';
     document.getElementById('authPage').style.height = '100vh';
+    document.getElementById('authPage').style.zIndex = '9999';
+    
+    // SEMBUNYIKAN SIDEBAR & TOPBAR
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
 }
 
 function showDashboard() {
