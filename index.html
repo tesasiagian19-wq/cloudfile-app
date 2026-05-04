@@ -1606,17 +1606,21 @@ async function loadFiles() {
         });
         const data = await response.json();
         document.getElementById('dashTotalFiles').textContent = data.total || 0;
+        
+        // Update recent files di dashboard
         const tbody = document.getElementById('recentFilesTable');
         if (tbody) {
             if (!data.files || data.files.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;">No files yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-cell">No files yet</td></tr>';
             } else {
                 tbody.innerHTML = data.files.map(f => `
-                    <tr><td>📄 ${f.name}</td><td>${f.size_readable}</td><td>${new Date(f.last_modified).toLocaleDateString('id-ID')}</td>
-                    <td><button onclick="downloadFile('${f.name}')" style="background:#ff6b9d;color:white;border:none;padding:5px 10px;border-radius:5px;">Download</button></td></tr>
+                    <tr><td><i class="fas fa-file" style="color:#ff6b9d;margin-right:8px;"></i><strong>${f.name}</strong></td><td>${f.size_readable}</td><td>${new Date(f.last_modified).toLocaleDateString('id-ID')}</td><td><button onclick="downloadFile('${f.name}')" class="btn-action btn-download"><i class="fas fa-download"></i></button></td></tr>
                 `).join('');
             }
         }
+        
+        // Update files table juga
+        loadFilesTable();
     } catch (e) { console.log(e); }
 }
 
