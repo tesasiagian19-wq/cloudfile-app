@@ -1390,92 +1390,194 @@ body {
         </div>
     </div>
 
-    <script>
-    const API_URL = 'https://tesa25.pythonanywhere.com/api';
-    let authToken = localStorage.getItem('token');
-    let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+   <script>
+const API_URL = 'https://tesa25.pythonanywhere.com/api';
+let authToken = localStorage.getItem('token');
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
-    function showLogin() {
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginTab').style.background = '#ff6b9d';
-        document.getElementById('loginTab').style.color = 'white';
-        document.getElementById('registerTab').style.background = '#ddd';
-        document.getElementById('registerTab').style.color = 'black';
-    }
+function showLogin() {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('registerForm').style.display = 'none';
+}
 
-    function showRegister() {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        document.getElementById('registerTab').style.background = '#ff6b9d';
-        document.getElementById('registerTab').style.color = 'white';
-        document.getElementById('loginTab').style.background = '#ddd';
-        document.getElementById('loginTab').style.color = 'black';
-    }
+function showRegister() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+}
 
-    async function doLogin() {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        if (!email || !password) { alert('Email dan password harus diisi!'); return; }
-        try {
-            const response = await fetch(`${API_URL}/login`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await response.json();
-            if (data.error) { alert(data.message); return; }
-            authToken = data.token; currentUser = data.user;
-            localStorage.setItem('token', authToken);
-            localStorage.setItem('currentUser', JSON.stringify(data.user));
-            showDashboard();
-        } catch (error) { console.log('Error:', error); }
-    }
+async function doLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) { alert('Email dan password harus diisi!'); return; }
+    try {
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (data.error) { alert(data.message); return; }
+        authToken = data.token; currentUser = data.user;
+        localStorage.setItem('token', authToken);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+        showDashboard();
+    } catch (error) { console.log(error); }
+}
 
-    async function doRegister() {
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        if (!name || !email || !password) { alert('Semua field harus diisi!'); return; }
-        if (password.length < 6) { alert('Password minimal 6 karakter!'); return; }
-        try {
-            const response = await fetch(`${API_URL}/register`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password })
-            });
-            const data = await response.json();
-            if (data.error) { alert(data.message); return; }
-            alert('Registrasi berhasil! Silakan login.');
-            showLogin();
-        } catch (error) { console.log('Error:', error); }
-    }
+async function doRegister() {
+    const name = document.getElementById('regName').value;
+    const email = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPassword').value;
+    if (!name || !email || !password) { alert('Semua field harus diisi!'); return; }
+    if (password.length < 6) { alert('Password minimal 6 karakter!'); return; }
+    try {
+        const response = await fetch(`${API_URL}/register`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+        const data = await response.json();
+        if (data.error) { alert(data.message); return; }
+        alert('Registrasi berhasil! Silakan login.');
+        showLogin();
+    } catch (error) { console.log(error); }
+}
 
-    function showDashboard() {
-        document.getElementById('authPage').style.display = 'none';
-        document.getElementById('sidebar').style.display = 'flex';
-        document.getElementById('topbar').style.display = 'flex';
-        showPage('dashboard');
-        if (currentUser) document.getElementById('userNameTop').textContent = 'Hello, ' + currentUser.name;
-    }
+function logout() {
+    authToken = null; currentUser = null;
+    localStorage.removeItem('token'); localStorage.removeItem('currentUser');
+    const av = document.getElementById('avatarDisplay');
+    if (av) { av.style.backgroundImage = ''; av.textContent = '🌸'; }
+    document.getElementById('authPage').style.display = 'block';
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
+}
 
-    function logout() {
-        authToken = null; currentUser = null;
-        localStorage.removeItem('token'); localStorage.removeItem('currentUser');
-        document.getElementById('authPage').style.display = 'block';
-        document.getElementById('sidebar').style.display = 'none';
-        document.getElementById('topbar').style.display = 'none';
-    }
+function showDashboard() {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('sidebar').style.display = 'flex';
+    document.getElementById('topbar').style.display = 'flex';
+    showPage('dashboard');
+    if (currentUser) document.getElementById('userNameTop').textContent = 'Hello, ' + currentUser.name;
+    loadAvatar();
+    loadFiles();
+    loadStorageInfo();
+}
 
-    function showPage(p) {
-        document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-        const m = {'dashboard':'dashboardPage','files':'filesPage','upload':'uploadPage','storage':'storagePage','pricing':'pricingPage'};
-        if (m[p]) document.getElementById(m[p]).classList.add('active');
-    }
+function showPage(p) {
+    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+    const m = {'dashboard':'dashboardPage','files':'filesPage','upload':'uploadPage','storage':'storagePage','pricing':'pricingPage'};
+    if (m[p]) document.getElementById(m[p]).classList.add('active');
+}
 
-    window.onload = function() {
-        document.getElementById('sidebar').style.display = 'none';
-        document.getElementById('topbar').style.display = 'none';
-        if (authToken && currentUser) showDashboard();
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+
+// ========== AVATAR ==========
+const defaultAvatars = ['🌸','💕','🎀','🦄','🍰','💖','✨','🌈','🐰','🍭'];
+
+function changeAvatar(event) {
+    const file = event.target.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = e.target.result;
+        localStorage.setItem('avatar_' + (currentUser?.email || 'default'), img);
+        const d = document.getElementById('avatarDisplay');
+        if (d) { d.style.backgroundImage = `url(${img})`; d.style.backgroundSize = 'cover'; d.textContent = ''; }
     };
-    </script>
+    reader.readAsDataURL(file);
+}
+
+function loadAvatar() {
+    const avatar = localStorage.getItem('avatar_' + (currentUser?.email || 'default'));
+    const d = document.getElementById('avatarDisplay');
+    if (!d) return;
+    if (avatar) { d.style.backgroundImage = `url(${avatar})`; d.style.backgroundSize = 'cover'; d.textContent = ''; }
+    else { d.textContent = defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]; }
+}
+
+// ========== STORAGE ==========
+async function loadStorageInfo() {
+    try {
+        const response = await fetch(`${API_URL}/storage/info`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        const dashStorage = document.getElementById('dashStorage');
+        const sidebarStorage = document.getElementById('sidebarStorage');
+        if (dashStorage) dashStorage.textContent = data.used_readable + ' / ' + data.limit_readable;
+        if (sidebarStorage) sidebarStorage.textContent = data.used_readable + ' / ' + data.limit_readable;
+    } catch (e) { console.log(e); }
+}
+
+// ========== UPLOAD ==========
+async function uploadFiles() {
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) { alert('Pilih file dulu!'); return; }
+    for (let file of fileInput.files) {
+        const formData = new FormData(); formData.append('file', file);
+        try {
+            const response = await fetch(`${API_URL}/files/upload`, {
+                method: 'POST', headers: { 'Authorization': `Bearer ${authToken}` }, body: formData
+            });
+            const data = await response.json();
+            if (data.error) { alert('Gagal: ' + data.message); return; }
+            alert(file.name + ' berhasil diupload! ✅');
+        } catch (e) { console.log(e); }
+    }
+    loadFiles(); loadStorageInfo();
+}
+
+async function loadFiles() {
+    try {
+        const response = await fetch(`${API_URL}/files`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        document.getElementById('dashTotalFiles').textContent = data.total || 0;
+        const tbody = document.getElementById('recentFilesTable');
+        if (tbody) {
+            if (!data.files || data.files.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;">No files yet</td></tr>';
+            } else {
+                tbody.innerHTML = data.files.map(f => `
+                    <tr><td>📄 ${f.name}</td><td>${f.size_readable}</td><td>${new Date(f.last_modified).toLocaleDateString('id-ID')}</td>
+                    <td><button onclick="downloadFile('${f.name}')" style="background:#ff6b9d;color:white;border:none;padding:5px 10px;border-radius:5px;">Download</button></td></tr>
+                `).join('');
+            }
+        }
+    } catch (e) { console.log(e); }
+}
+
+async function downloadFile(filename) {
+    const r = await fetch(`${API_URL}/files/download/${filename}`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+    const d = await r.json();
+    if (d.download_url) window.open(d.download_url, '_blank');
+}
+
+// ========== TABS ==========
+function showBilling(type) {
+    document.getElementById('weeklyPlans').style.display = type==='weekly'?'grid':'none';
+    document.getElementById('monthlyPlans').style.display = type==='monthly'?'grid':'none';
+    document.getElementById('yearlyPlans').style.display = type==='yearly'?'grid':'none';
+}
+
+async function upgradePlan(key) {
+    if (!authToken) { alert('Login dulu!'); return; }
+    if (!confirm('Upgrade ke ' + key + '?')) return;
+    const r = await fetch(`${API_URL}/upgrade`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ license_key: key })
+    });
+    const d = await r.json();
+    if (d.error) { alert(d.message); return; }
+    alert('Upgrade berhasil! ' + d.license_type + ' | ' + d.storage);
+    loadStorageInfo();
+}
+
+window.onload = function() {
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
+    if (authToken && currentUser) showDashboard();
+};
+</script>
     </body>
     </html>
