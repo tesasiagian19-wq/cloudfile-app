@@ -1603,6 +1603,7 @@ function loadStorageDetail() {
         const su = document.getElementById('storageUsed');
         const sa = document.getElementById('storageAvailable');
         const sf = document.getElementById('storageCircleFill');
+        
         if (sp) sp.textContent = (data.percentage || 0).toFixed(1) + '%';
         if (su) su.textContent = data.used_readable;
         if (sa) {
