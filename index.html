@@ -1763,24 +1763,39 @@ async function loadStorageInfo() {
 }
        
 // ========== TABS ==========
-window.showBilling = function(type) {
-    document.getElementById('weeklyPlans').style.display = type==='weekly'?'grid':'none';
-    document.getElementById('monthlyPlans').style.display = type==='monthly'?'grid':'none';
-    document.getElementById('yearlyPlans').style.display = type==='yearly'?'grid':'none';
-};
-async function upgradePlan(key) {
-    if (!authToken) { alert('Login dulu!'); return; }
-    if (!confirm('Upgrade ke ' + key + '?')) return;
-    const r = await fetch(`${API_URL}/upgrade`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
-        body: JSON.stringify({ license_key: key })
-    });
-    const d = await r.json();
-    if (d.error) { alert(d.message); return; }
-    alert('Upgrade berhasil! ' + d.license_type + ' | ' + d.storage);
-    loadStorageInfo();
+        window.showBilling = function(type) {
+            document.getElementById('weeklyPlans').style.display = type==='weekly'?'grid':'none';
+            document.getElementById('monthlyPlans').style.display = type==='monthly'?'grid':'none';
+            document.getElementById('yearlyPlans').style.display = type==='yearly'?'grid':'none';
+        };
+        async function upgradePlan(key) {
+            if (!authToken) { alert('Login dulu!'); return; }
+            if (!confirm('Upgrade ke ' + key + '?')) return;
+            const r = await fetch(`${API_URL}/upgrade`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                body: JSON.stringify({ license_key: key })
+            });
+            const d = await r.json();
+            if (d.error) { alert(d.message); return; }
+            alert('Upgrade berhasil! ' + d.license_type + ' | ' + d.storage);
+            loadStorageInfo();
 }
-
+       
+        window.deleteFile = async function(filename) {
+            if (!confirm('Yakin hapus ' + filename + '?')) return;
+            try {
+                const r = await fetch(`${API_URL}/files/delete/${filename}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const d = await r.json();
+                if (d.error) { alert(d.message); return; }
+                alert('File dihapus! ✅');
+                loadFiles();
+                loadStorageInfo();
+            } catch (e) { console.log(e); }
+        };
+       
 window.onload = function() {
     document.getElementById('sidebar').style.display = 'none';
     document.getElementById('topbar').style.display = 'none';
