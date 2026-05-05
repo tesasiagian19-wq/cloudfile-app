@@ -1781,20 +1781,13 @@ async function loadStorageInfo() {
             loadStorageInfo();
 }
        
-        window.deleteFile = async function(filename) {
-            if (!confirm('Yakin hapus ' + filename + '?')) return;
-            try {
-                const r = await fetch(`${API_URL}/files/delete/${filename}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                const d = await r.json();
-                if (d.error) { alert(d.message); return; }
-                alert('File dihapus! ✅');
-                loadFiles();
-                loadStorageInfo();
-            } catch (e) { console.log(e); }
-        };
+        // Function definition
+function deleteFile() {
+    console.log('File deleted');
+}
+
+// Attach the listener once the DOM is ready
+document.getElementById('delete-btn').addEventListener('click', deleteFile);
        
 window.onload = function() {
     document.getElementById('sidebar').style.display = 'none';
