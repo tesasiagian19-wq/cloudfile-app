@@ -1780,12 +1780,21 @@ async function loadStorageInfo() {
             alert('Upgrade berhasil! ' + d.license_type + ' | ' + d.storage);
             loadStorageInfo();
 }
-       
         // Function definition
-function deleteFile() {
-    console.log('File deleted');
-}
-
+window.deleteFile = async function(filename) {
+    if (!confirm('Yakin hapus ' + filename + '?')) return;
+    try {
+        const response = await fetch(`${API_URL}/files/delete/${filename}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await response.json();
+        if (data.error) { alert(data.message); return; }
+        alert('File dihapus! ✅');
+        loadFiles();
+        loadStorageInfo();
+    } catch (e) { console.log(e); }
+};
 // Attach the listener once the DOM is ready
 document.getElementById('delete-btn').addEventListener('click', deleteFile);
        
